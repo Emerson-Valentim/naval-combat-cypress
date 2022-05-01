@@ -1,0 +1,5 @@
+{
+  "env": {
+    "SERVER_BASE_URL": "https://bsite.net/poduran"
+  }
+}
