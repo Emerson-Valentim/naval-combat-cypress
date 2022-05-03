@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  #Redis configuration
+  redis:
+    image: redis
+    ports:
+      - "2000:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30

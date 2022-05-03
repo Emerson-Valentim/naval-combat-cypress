@@ -1,8 +1,8 @@
 {
   "scripts": {
     "cy:open": "npx cypress open",
-    "test": "npx cypress run",
-    "report": "npx cypress run --reporter mochawesome && npx mochawesome-merge ./cypress/results/*.json -o output.json && npx marge output.json",
+    "cy:test": "npx cypress run",
+    "cy:report": "npx cypress run --reporter mochawesome && npx mochawesome-merge ./cypress/results/*.json -o output.json && npx marge output.json",
     "clean": "rm -rf cypress/videos/ && rm -rf cypress/results/ & rm -rf mochawesome-report && rm output.json"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
+    "ioredis": "^5.0.4",
     "unique-username-generator": "^1.0.1"
   }
 }
