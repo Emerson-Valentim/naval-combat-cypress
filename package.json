@@ -1,7 +1,9 @@
 {
   "scripts": {
     "cy:open": "npx cypress open",
-    "test": "npx cypress run"
+    "test": "npx cypress run",
+    "report": "npx cypress run --reporter mochawesome && npx mochawesome-merge ./cypress/results/*.json -o output.json && npx marge output.json",
+    "clean": "rm -rf cypress/videos/ && rm -rf cypress/results/ & rm -rf mochawesome-report && rm output.json"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.9.1",
@@ -9,6 +11,9 @@
     "cypress": "^9.6.0",
     "eslint": "^8.14.0",
     "eslint-plugin-cypress": "^2.12.1",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.2.1",
+    "mochawesome-report-generator": "^6.2.0",
     "typescript": "^4.6.4"
   },
   "dependencies": {
