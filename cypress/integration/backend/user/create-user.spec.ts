@@ -1,40 +1,25 @@
-import { generateUsername } from "unique-username-generator";
-
-const buildBody = (data = {}) => ({
-  DeLogin: generateUsername(),
-  DeSenha: "password",
-  DeNome: "anyname",
-  CdIdFotoPerfil: "0",
-  CdPontosCaptao: "0",
-  FlPremium: true,
-  CdQtdCreditos: 27250,
-  FlAdmin: false,
-  ...data,
-});
-
 describe("create user", () => {
-  const CREATE_USER_URL = `${Cypress.env(
-    "SERVER_BASE_URL"
-  )}/User/CadastrarUser`;
-
   it("provides all parameters and receive success", () => {
-    cy.request({
-      url: CREATE_USER_URL,
-      method: "POST",
-      body: buildBody(),
-    }).then((response) => {
+    cy.createUser().then((response) => {
       expect(response.status).eq(200);
       expect(response.body).eq("Dados salvos com sucesso!");
     });
   });
 
-  describe("and fail", () => {
-    it("provides no parameters", () => {
-      cy.request({
-        url: CREATE_USER_URL,
-        method: "POST",
-        body: {},
-        failOnStatusCode: false,
+  describe("provides no parameters", () => {
+    it("and fail", () => {
+      cy.createUser({
+        options: { failOnStatusCode: false },
+        data: {
+          DeLogin: null,
+          DeSenha: null,
+          DeNome: null,
+          CdIdFotoPerfil: null,
+          CdPontosCaptao: null,
+          FlPremium: null,
+          CdQtdCreditos: null,
+          FlAdmin: null,
+        },
       }).then((response) => {
         expect(response.status).not.eq(200);
 
@@ -54,15 +39,15 @@ describe("create user", () => {
         );
       });
     });
+  });
 
-    it("omits CdQtdCreditos", () => {
-      cy.request({
-        url: CREATE_USER_URL,
-        method: "POST",
-        body: buildBody({
-          CdQtdCreditos: undefined,
-        }),
-        failOnStatusCode: false,
+  describe("omits CdQtdCreditos", () => {
+    it("and fail", () => {
+      cy.createUser({
+        data: { CdQtdCreditos: undefined },
+        options: {
+          failOnStatusCode: false,
+        },
       }).then((response) => {
         expect(response.status).not.eq(200);
 
@@ -75,23 +60,31 @@ describe("create user", () => {
         );
       });
     });
+  });
 
-    it("provides existing username and receive error", () => {
-      const initialBody = buildBody();
+  describe("provides existing username", () => {
+    it("and fail", () => {
+      const username = `same-username-${new Date().valueOf()}`;
 
-      cy.request({
-        url: CREATE_USER_URL,
-        method: "POST",
-        body: initialBody,
-        failOnStatusCode: false,
-      }).then(() => {
-        cy.request({
-          url: CREATE_USER_URL,
-          method: "POST",
-          body: initialBody,
+      cy.createUser({
+        data: {
+          DeLogin: username,
+        },
+        options: {
           failOnStatusCode: false,
+        },
+      }).then(() => {
+        cy.createUser({
+          data: {
+            DeLogin: username,
+          },
+          options: {
+            failOnStatusCode: false,
+          },
         }).then((response) => {
-          expect(response.body.detail).eq("Usuario ja cadastrado na base de dados!",);
+          expect(response.body.detail).eq(
+            "Usuario ja cadastrado na base de dados!"
+          );
         });
       });
     });

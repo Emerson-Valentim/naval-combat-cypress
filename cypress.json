@@ -7,8 +7,10 @@
     "reportDir": "cypress/results",
     "overwrite": false,
     "html": false,
-    "json": true,
-    "cdn": true,
-    "charts": true
+    "json": true
+  },
+  "video": false,
+  "screenshots": {
+    "screenshotOnRunFailure": false
   }
 }
