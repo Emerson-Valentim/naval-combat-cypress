@@ -1,5 +1,5 @@
 import Cache from "../fixtures/storage/cache";
-import { createUser } from "../fixtures/payloads/user";
+import { createUser, deleteUser, getUser } from "../fixtures/payloads/user";
 
 const cache = Cache();
 
@@ -20,5 +20,23 @@ Cypress.Commands.add("createUser", (config) => {
   return cy.request({
     ...payload,
     ...config?.options,
+  });
+});
+
+Cypress.Commands.add("deleteUser", (config) => {
+  const payload = deleteUser(config?.data);
+
+  return cy.request({
+    ...payload,
+    ...config?.options,
+  });
+});
+
+Cypress.Commands.add("getUser", (config) => {
+  const payload = getUser(config?.data);
+
+  return cy.request({
+    ...payload,
+    ...config.options,
   });
 });
