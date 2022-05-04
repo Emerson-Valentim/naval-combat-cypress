@@ -62,7 +62,7 @@ describe("create user", () => {
     });
   });
 
-  describe("provides existing username and receive error", () => {
+  describe("provides existing username", () => {
     it("and fail", () => {
       const username = `same-username-${new Date().valueOf()}`;
 
