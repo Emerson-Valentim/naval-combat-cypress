@@ -5,6 +5,12 @@
   "reporter": "mochawesome",
   "reporterOptions": {
     "reportDir": "cypress/results",
-    "overwrite": true
+    "overwrite": false,
+    "html": false,
+    "json": true
+  },
+  "video": false,
+  "screenshots": {
+    "screenshotOnRunFailure": false
   }
 }
