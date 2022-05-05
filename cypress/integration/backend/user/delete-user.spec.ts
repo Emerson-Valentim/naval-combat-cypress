@@ -1,19 +1,14 @@
 describe("delete user", () => {
   it("provides an existing id and receive success", () => {
-    const userId = new Date().valueOf();
 
-    cy.createUser({
-      data: {
-        CdId: userId,
-      },
-    }).then(() => {
+    cy.createUser().then((createResponse) => {
       cy.deleteUser({
         data: {
-          CdId: userId,
+          CD_ID: createResponse?.body?.value?.cdId,
         },
-      }).then((response) => {
-        expect(response.status).eq(200);
-        expect(response.body).eq("Usuario apagado com sucesso");
+      }).then((deleteResponse) => {
+        expect(deleteResponse.status).eq(200);
+        expect(deleteResponse.body.value).eq("Usuario apagado com sucesso");
       });
     });
   });
@@ -23,11 +18,17 @@ describe("delete user", () => {
     it("and fails", () => {
       cy.deleteUser({
         data: {
-          CdId: "any-username-that-doesn't-exist"
+          CD_ID: "any-id-that-doesn't-exist"
         }
       }).then((response) => {
+        const stringifiedErrors = JSON.stringify(response.body.errors);
+
         expect(response.status).not.eq(200);
-        expect(response.body).not.eq("");
+        expect(stringifiedErrors).eq(JSON.stringify({
+          "CD_ID": [
+            "The value 'any-id-that-doesn't-exist' is not valid."
+          ]
+        }));
       });
     });
   });
@@ -47,25 +48,26 @@ describe("delete user", () => {
 
   describe("provides a null id", () => {
     it("and fails", () => {
-      const userId = new Date().valueOf();
-
-      cy.createUser({
-        data: {
-          CdId: userId,
-        },
-      }).then(() => {
+      cy.createUser().then((createResponse) => {
         cy.deleteUser({
           data: {
-            CdId: userId,
+            DeLogin: createResponse.body?.value?.deLogin,
           },
         }).then(() => {
           cy.deleteUser({
             data: {
-              CdId: userId
+              CdId: createResponse.body?.value?.deLogin
             }
-          }).then((response) => {
-            expect(response.status).not.eq(200);
-            expect(response.body).not.eq("");
+          }).then((deleteResponse) => {
+            const stringifiedErrors = JSON.stringify(deleteResponse.body.errors);
+
+            cy.log(JSON.stringify(deleteResponse.body));
+            expect(deleteResponse.status).not.eq(200);
+            expect(stringifiedErrors).not.eq(JSON.stringify({
+              "CD_ID": [
+                `The value '${createResponse.body?.value?.cdId}' is not valid.`
+              ]
+            }));
           });
         });
       });

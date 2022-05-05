@@ -6,6 +6,7 @@ export const createUser = (data) => {
   return {
     url: `${BASE_URL}/User/CadastrarUser`,
     method: "POST",
+    failOnStatusCode: false,
     body: {
       DeLogin: generateUsername(),
       DeSenha: "password",
@@ -24,7 +25,8 @@ export const deleteUser = (data) => {
   return {
     url: `${BASE_URL}/User/ApagarUsuario`,
     method: "DELETE",
-    params: {
+    failOnStatusCode: false,
+    qs: {
       CD_ID: new Date().valueOf(),
       ...data,
     },
@@ -35,7 +37,8 @@ export const getUser = (data) => {
   return {
     url: `${BASE_URL}/User/ConsultarUser`,
     method: "GET",
-    params: {
+    failOnStatusCode: false,
+    qs: {
       DE_LOGIN: generateUsername(),
       DE_SENHA: "password",
       ...data,
