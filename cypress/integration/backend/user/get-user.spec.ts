@@ -29,8 +29,8 @@ describe("get user", () => {
           CdId: "any-username-that-doesn't-exist"
         }
       }).then((response) => {
-        expect(response.status).eq(200);
-        expect(response.body?.value).eq(null);
+        expect(response.status).eq(404);
+        expect(response.body?.value).eq("Nenhum usuario encontrado na base de dados");
       });
     });
   });

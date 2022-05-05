@@ -1,15 +1,20 @@
 describe("create user", () => {
   it("provides all parameters and receive success", () => {
-    cy.createUser().then((response) => {
+    const username = `random-username-${new Date().valueOf()}`;
+
+    cy.createUser({
+      data: {
+        DeLogin: username,
+      },
+    }).then((response) => {
       expect(response.status).eq(200);
-      expect(response.body).eq("Dados salvos com sucesso!");
+      expect(response.body?.value?.deLogin).eq(username);
     });
   });
 
   describe("provides no parameters", () => {
     it("and fail", () => {
       cy.createUser({
-        options: { failOnStatusCode: false },
         data: {
           DeLogin: null,
           DeSenha: null,
@@ -45,9 +50,6 @@ describe("create user", () => {
     it("and fail", () => {
       cy.createUser({
         data: { CdQtdCreditos: undefined },
-        options: {
-          failOnStatusCode: false,
-        },
       }).then((response) => {
         expect(response.status).not.eq(200);
 
@@ -70,19 +72,15 @@ describe("create user", () => {
         data: {
           DeLogin: username,
         },
-        options: {
-          failOnStatusCode: false,
-        },
       }).then(() => {
         cy.createUser({
           data: {
             DeLogin: username,
           },
-          options: {
-            failOnStatusCode: false,
-          },
         }).then((response) => {
-          expect(response.body.detail).eq(
+          expect(response.status).eq(409);
+
+          expect(response.body.value).eq(
             "Usuario ja cadastrado na base de dados!"
           );
         });
