@@ -25,6 +25,7 @@ describe("add profile picture", () => {
             },
           }).then((createProfilePictureResponse) => {
             expect(createProfilePictureResponse.status).not.eq(200);
+            expect(createProfilePictureResponse.body.value).eq("Usuario ja possui foto cadastrada");
           });
         });
       });
@@ -38,7 +39,6 @@ describe("add profile picture", () => {
           CdIdUsuario: "any-username-that-doesn't-exist",
         },
       }).then((createProfilePictureResponse) => {
-        //cy.log(JSON.stringify(createProfilePictureResponse.body));
         expect(createProfilePictureResponse.status).not.eq(200);
       });
     });

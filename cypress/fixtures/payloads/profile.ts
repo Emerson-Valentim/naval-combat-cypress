@@ -3,7 +3,6 @@ import { image } from "../storage/data.json";
 const BASE_URL = Cypress.env("SERVER_BASE_URL");
 
 export const createProfilePicture = (data) => {
-
   return {
     url: `${BASE_URL}/FotoPerfil/CadastrarFoto`,
     method: "POST",
